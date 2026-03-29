@@ -62,12 +62,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 14px;
     padding: 10px 20px;
     border-bottom: 1px solid var(--border);
     background: rgba(7,24,40,0.9);
     backdrop-filter: blur(10px);
     z-index: 100;
     flex-shrink: 0;
+    min-width: 0;
   }
   #header h1 {
     font-family: var(--font-display);
@@ -359,7 +362,7 @@
   }
   .overlay-title {
     font-family: var(--font-display);
-    font-size: 2rem;
+    font-size: clamp(1.25rem, 4vw + 0.75rem, 2rem);
     font-weight: 900;
     color: var(--glow-cyan);
     text-shadow: 0 0 40px var(--glow-cyan), 0 0 80px rgba(0,212,255,0.4);
@@ -376,7 +379,7 @@
     50% { text-shadow: 0 0 60px var(--glow-cyan), 0 0 100px rgba(0,212,255,0.5); }
   }
   .loading-bar-wrap {
-    width: 300px;
+    width: min(300px, 90vw);
     height: 3px;
     background: rgba(0,212,255,0.1);
     border-radius: 2px;
@@ -453,6 +456,8 @@
     border: 2px solid var(--glow-green);
     border-radius: 8px;
     padding: 30px 40px;
+    max-width: calc(100vw - 24px);
+    box-sizing: border-box;
     text-align: center;
     z-index: 300;
     box-shadow: 0 0 60px rgba(57,255,20,0.4);
@@ -535,6 +540,154 @@
     font-family: var(--font-display);
     font-size: 0.85rem;
     color: var(--glow-blue);
+    flex-shrink: 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  #overlay {
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    box-sizing: border-box;
+    text-align: center;
+  }
+  #overlay .overlay-sub {
+    padding: 0 12px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1100px) {
+    #sidebar { width: min(200px, 28vw); }
+    #right-panel { width: min(180px, 26vw); }
+    .score-item .val { font-size: 1rem; }
+  }
+
+  @media (max-width: 900px) {
+    html, body {
+      overflow: auto;
+      height: auto;
+      min-height: 100%;
+      min-height: 100dvh;
+    }
+    body {
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    #app {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      height: auto;
+    }
+    #main {
+      flex-direction: column;
+      flex: 1 1 auto;
+      overflow: visible;
+      min-height: 0;
+    }
+    #canvas-wrapper {
+      order: -1;
+      width: 100%;
+      min-height: min(50vh, 480px);
+      flex: 0 0 auto;
+    }
+    #sidebar {
+      width: 100%;
+      max-height: none;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    #right-panel {
+      width: 100%;
+      border-left: none;
+      border-top: 1px solid var(--border);
+      min-height: 160px;
+    }
+    #header {
+      padding: 10px 14px;
+    }
+    #header h1 {
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      letter-spacing: 0.12em;
+    }
+    .hud-badges {
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    #score-panel {
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      width: 100%;
+      order: 4;
+    }
+    #timer-display {
+      width: 100%;
+      text-align: center;
+      order: 5;
+    }
+  }
+
+  @media (max-width: 600px) {
+    #header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    #header h1 {
+      text-align: center;
+      width: 100%;
+    }
+    .hud-badges {
+      justify-content: center;
+    }
+    .badge {
+      font-size: 0.58rem;
+      padding: 4px 8px;
+      letter-spacing: 0.06em;
+    }
+    .score-item {
+      font-size: 0.55rem;
+    }
+    .score-item .val {
+      font-size: 0.95rem;
+    }
+    #statusbar {
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      justify-content: center;
+      text-align: center;
+      padding: 8px 12px;
+      font-size: 0.5rem;
+    }
+    #statusbar > span {
+      flex: 1 1 100%;
+    }
+    #statusbar #fps-display {
+      order: -1;
+    }
+    .atom-palette {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .palette-atom {
+      min-width: 0;
+    }
+    .success-title { font-size: 1rem; }
+    .success-molecule { font-size: 1.15rem; word-break: break-word; }
+    .start-btn {
+      padding: 12px 24px;
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    #mission-name { font-size: 0.75rem; }
+    .mission-formula { font-size: 1rem; }
+    .atom-palette {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 </head>
@@ -564,7 +717,7 @@
       <div class="score-item"><span class="val" id="combo-val">x1</span>KOMBİ</div>
       <div class="score-item"><span class="val" id="level-val">1</span>SEVİYE</div>
     </div>
-    <div id="timer-display" id="timer">05:00</div>
+    <div id="timer-display">05:00</div>
   </div>
 
   <!-- MAIN -->
